@@ -8,9 +8,7 @@ State is:
 - data that change by user interaction.
 - data property and handle it by the component owner.
 
-## How many State exist?
+## Independents and complex States
 
-
-## What is the differences between React.Component VS React.useState
-
-
+- Simples or Independents State
+- Complex State: Always we need to use in Classes Components
