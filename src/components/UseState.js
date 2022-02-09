@@ -5,26 +5,33 @@ const SecurityCode = 'paradigma';
 const UseState = ( { name } ) => {
 
   //State Management: Individual State and Declarative way
-  const [value, setValue ] = React.useState('');
-  const [error, setError ] = React.useState(false);
-  const [loading, setLoading ] = React.useState(false);
+  const [state, setState] = React.useState({
+    value: '',
+    error: false,
+    loading: false,
+  })
 
-  console.log(value)
-  
+  console.log(state)
 
   React.useEffect( ()=>{
     console.log("Starting Effect");
 
-    if(loading){
+    if(state.loading){
       setTimeout( ()=>{
         console.log("Start Validating")
 
-        if(value === SecurityCode){
-          setLoading(false);
-          setError(false);
+        if( state.value === SecurityCode ){
+          setState({
+            ...state,
+            loading: false,
+            error: false,
+          })
         } else {
-          setError(true);
-          setLoading(false);
+          setState({
+            ...state,
+            error: true,
+            loading: false,
+          })
         } 
 
         console.log("End Validating")
@@ -32,26 +39,34 @@ const UseState = ( { name } ) => {
     }
 
     console.log("Ending Effect");
-  }, [loading]);
+  }, [state.loading]);
 
   return(
     <>
       <h2> Delete {name}</h2>
       <p>Please write the Security Code</p>
 
-      { (error && !loading) && (<p>Error: The Security Code is wrong</p>)}
+      { (state.error && !state.loading) && (<p>Error: The Security Code is wrong</p>)}
 
-      { loading && (<p>Loading...</p>) }
+      { state.loading && (<p>Loading...</p>) }
 
       <input 
         placeholder="Security code" 
-        value={value}
+        value={state.value}
         onChange={(event)=>{
-          setValue(event.target.value)
+          setState({ 
+            ...state,
+            value: event.target.value
+          })
         }}
       />
       <button
-        onClick={()=>setLoading(true)}
+        onClick={ ()=>{
+          setState({ 
+            ...state,
+            loading: true,
+          });
+        }}
       >Verify</button>
     </>
   )
