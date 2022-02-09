@@ -9,6 +9,8 @@ const UseState = ( { name } ) => {
     value: '',
     error: false,
     loading: false,
+    deleted: false,
+    confirmed: false,
   })
 
   console.log(state)
@@ -25,6 +27,8 @@ const UseState = ( { name } ) => {
             ...state,
             loading: false,
             error: false,
+            confirmed: true,
+
           })
         } else {
           setState({
@@ -41,35 +45,78 @@ const UseState = ( { name } ) => {
     console.log("Ending Effect");
   }, [state.loading]);
 
-  return(
-    <>
-      <h2> Delete {name}</h2>
-      <p>Please write the Security Code</p>
+  if( !state.deleted && !state.confirmed ){
+    return(
+      <>
+        <h2> Delete {name}</h2>
+        <p>Please write the Security Code</p>
+  
+        { (state.error && !state.loading) && (<p>Error: The Security Code is wrong</p>)}
+  
+        { state.loading && (<p>Loading...</p>) }
+  
+        <input 
+          placeholder="Security code" 
+          value={state.value}
+          onChange={(event)=>{
+            setState({ 
+              ...state,
+              value: event.target.value
+            })
+          }}
+        />
+        <button
+          onClick={ ()=>{
+            setState({ 
+              ...state,
+              loading: true,
+            });
+          }}
+        >Verify</button>
+      </>
+    )
+  } else if( state.confirmed && !state.deleted){
+    return(
+      <>
+        <h1>¿Are you sure?</h1>
 
-      { (state.error && !state.loading) && (<p>Error: The Security Code is wrong</p>)}
+        <button
+          onClick={ ()=>{
+            setState({
+              ...state,
+              deleted: true,
+            });
+          }}
+        >Yes, I'm sure</button>
+        <button
+          onClick={ ()=>{
+            setState({
+              ...state,
+              confirmed: false,
+              value: '',
+            })
+          }}
+        >No, I want comeback</button>
+      </>
+    );
+  } else {
+    return(
+      <>
+        <p>Deleted successfully !</p>
 
-      { state.loading && (<p>Loading...</p>) }
-
-      <input 
-        placeholder="Security code" 
-        value={state.value}
-        onChange={(event)=>{
-          setState({ 
-            ...state,
-            value: event.target.value
-          })
-        }}
-      />
-      <button
-        onClick={ ()=>{
-          setState({ 
-            ...state,
-            loading: true,
-          });
-        }}
-      >Verify</button>
-    </>
-  )
+        <button
+          onClick={ ()=>{
+            setState({
+              ...state,
+              confirmed: false,
+              deleted: false,
+              value: '',
+            })
+          }}
+        >Re Start</button>
+      </>
+    );
+  }
 };
 
 export {UseState}
