@@ -21,9 +21,10 @@ const UseState = ( { name } ) => {
 
         if(value === SecurityCode){
           setLoading(false);
+          setError(false);
         } else {
-          setLoading(false);
           setError(true);
+          setLoading(false);
         } 
 
         console.log("End Validating")
@@ -38,25 +39,19 @@ const UseState = ( { name } ) => {
       <h2> Delete {name}</h2>
       <p>Please write the Security Code</p>
 
-      { loading && <p>Loading...</p>}
+      { (error && !loading) && (<p>Error: The Security Code is wrong</p>)}
 
-      { error && <p>Error: The Security Code is wrong</p>}
+      { loading && (<p>Loading...</p>) }
 
       <input 
         placeholder="Security code" 
-        // type="password"
-        // minlength="9" 
-        // required
         value={value}
         onChange={(event)=>{
           setValue(event.target.value)
         }}
       />
       <button
-        onClick={()=>{
-          setLoading(true)
-          setError(false)
-        }}
+        onClick={()=>setLoading(true)}
       >Verify</button>
     </>
   )
