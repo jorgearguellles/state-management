@@ -1,4 +1,5 @@
 import React from 'react';
+import {Loading } from './Loading';
 
 class ClassState extends React.Component{
   // In this.props we can get all props passed and use it directly in the JSX
@@ -11,21 +12,40 @@ class ClassState extends React.Component{
 
     this.state = {
       error: false,
+      loading: false,
     }
 
   }
+
+  // UNSAFE_componentWillMount(){
+  //   console.log('componentWillMount')
+  // }
+
+  // componentWillUnmount(){
+  //   console.log('componentWillUnmount')
+
+  // }
+
+  componentDidMount(){
+    console.log('componentDidMount - ClassState')
+
+  }
   
+
   render(){
     return(
       <>
         <h2> Delete {this.props.name}</h2>
         <p>Please write the Security Code</p>
 
+        { this.state.loading && <Loading />}
+
+
         { this.state.error && <p>Error: The Security Code is wrong</p>}
 
         <input placeholder="Security code" />
         <button
-          onClick={()=>{this.setState({ error: !this.state.error })}}
+          onClick={()=>{this.setState({ loading: true })}}
         >Verify</button>
       </>
     )
