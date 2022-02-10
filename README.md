@@ -1,70 +1,122 @@
-# Getting Started with Create React App
+# State Management in React.js
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In the course we will work in a Security Codes Projects
 
-## Available Scripts
+## What is a State
 
-In the project directory, you can run:
+State is:
+- data that change by user interaction.
+- data property and handle it by the component owner.
 
-### `npm start`
+## Independents and complex States
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Simples or Independents State
+- Complex State: Always we need to use in Classes Components
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## ¿What is a Reducer?
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- The Reducer is a tool allows us to declare all the possible states of our application to be able to work with them declaratively way.
+- the useReducer hook let us State management by declarative way
 
-### `npm run build`
+The Reducer need two principal objects:
+1. Compound State: Is a literal Object where all our App States will live like object attributes
+2. Actions: Are trigger allows us move of one State to another State and have two props:
+    - Action Type: What is a _key name_ to find the new State and then update the App State. 
+    - Payload: Is Optional but is important when we work dynamic States.
+![work flow](./src/img/reducer-work-flow.png)
+![work flow](./src/img/reducer-type.png)
+![work flow](./src/img/reducer-type-payloadA.png)
+![work flow](./src/img/reducer-type-payloadB.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 3 wayt to write Reducers functions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+const initialState = {
+  value: '',
+  error: false,
+  loading: false,
+  deleted: false,
+  confirmed: false,
+};
 
-### `npm run eject`
+// 1. Obviously way to work Reducers
+const reducerIf = ( state, action ) => {
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+  if( action.type === 'ERROR' ){
+    return {
+      ...state,
+      error: true,
+      loading: false,
+    };
+  } else if ( action.type === 'CHECK'){
+    return {
+      ...state,
+      loading: true,
+    };
+  } else {
+    return {
+      ...state,
+    }
+  }
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+}
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+// 2. Popular way to work Reducer
+const reducerSwitch = ( state, actions ) => {
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+  switch( actions.type ){
+    case 'ERROR': 
+      return {
+        ...state,
+        error: true,
+        loading: false,
+      }
+    case 'CHECK':
+      return {
+        ...state,
+        loading: true,
+      };
+    default:
+      return {
+        ...state,
+      }
+  }
 
-## Learn More
+}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// 3. Juan's Favorite way to work Reducers
+const reducerObj = ( state ) => ({
 
-### Code Splitting
+  'ERROR': {
+    ...state,
+    error: true,
+    loading: false,
+  }, 
+  'CHECK': {
+    ...state,
+    loading: true,
+  }, 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+});
 
-### Analyzing the Bundle Size
+const reducer = (state, action ) => {
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  if( reducerObj(state)[action.type] ){
+    return reducerObj(state)[action.type];
+  } else {
+    return state;
+  }
 
-### Making a Progressive Web App
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Derivate States
 
-### Deployment
+A derivate State is create from States before created
+ 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
